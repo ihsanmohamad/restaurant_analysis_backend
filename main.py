@@ -17,7 +17,9 @@ def fastApp() -> FastAPI:
     app = FastAPI(title="Makan Manoi", description="Makan Manoi System")
     
     origins = [
-    "https://makanmanoi.netlify.app/"
+    "https://makanmanoi.netlify.app/",
+    "https://makanmanoi.netlify.app",
+    "http://makanmanoi.netlify.app",
     "http://192.168.1.9:3000"
 ]
 
