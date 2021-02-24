@@ -41,10 +41,10 @@ gmaps = googlemaps.Client(key='AIzaSyAdXQQhUH9oGNoADc_kCx1b1N4RoPuWsPg')
 @app.get('/search_place')
 async def search_place(restaurant: str):
     place_name = restaurant
-    lat = 4.2011092634940725
-    lng = 100.68568637114673
+    lat = 4.924981468858695
+    lng = 100.64908965731956
     place = gmaps.places(query=restaurant, type="restaurant", location=(lat, lng))
-    data = []
+    data = [] 
 
     for i in range(len( place['results'])):
 
