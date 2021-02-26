@@ -80,22 +80,27 @@ async def get_review(place_id: str):
     place = gmaps.place(place_id=place_id)
 
     reviews = [] #empty list which will hold dictionaries of review
-
-    for i in range(len( place['result']['reviews'])):
-        text = place['result']['reviews'][i]['text']
-        rating = place['result']['reviews'][i]['rating']
-        name = place['result']['reviews'][i]['author_name']
+    if place.get('result', {}).get('reviews')!=None:
+        for i in range(len( place['result']['reviews'])):
+            text = place['result']['reviews'][i]['text']
+            rating = place['result']['reviews'][i]['rating']
+            name = place['result']['reviews'][i]['author_name']
+            
+            reviews.append({
+                        'name': name,
+                        'rating':rating,
+                        'text':text
+                        }
+                        )
         
-        reviews.append({
-                    'name': name,
-                    'rating':rating,
-                    'text':text
-                    }
-                    )
-    df = pd.DataFrame(reviews)
-    print(df)
-    result = df.to_dict('records')
-    return result
+
+        df = pd.DataFrame(reviews)
+        result = df.to_dict('records')
+        return result
+
+    else:
+        return None
+    
 
 @app.get('/download_data')
 async def download_data(place_id: str):
@@ -106,32 +111,39 @@ async def download_data(place_id: str):
     place = gmaps.place(place_id=place_id)
 
     reviews = [] #empty list which will hold dictionaries of review
-
-    for i in range(len( place['result']['reviews'])):
-        text = place['result']['reviews'][i]['text']
-        rating = place['result']['reviews'][i]['rating']
-        
-        reviews.append({'rating':rating,
-                    'text':text
-                    }
-                    )
-    df = pd.DataFrame(reviews)
-
-    output = io.BytesIO()
-
-    writer = pd.ExcelWriter(output, engine='xlsxwriter')
     
-    file_name = slugify(place['result']['name'])
+    if place.get('result', {}).get('reviews')!=None:
+        for i in range(len( place['result']['reviews'])):
+            text = place['result']['reviews'][i]['text']
+            rating = place['result']['reviews'][i]['rating']
+            
+            reviews.append({'rating':rating,
+                        'text':text
+                        }
+                        )
+        df = pd.DataFrame(reviews)
+
+        output = io.BytesIO()
+
+        writer = pd.ExcelWriter(output, engine='xlsxwriter')
         
-    # result = df.to_excel(f"{file_name}.xlsx")
-    result = df.to_excel(writer)
-    writer.save()
-    xlsx_data = output.getvalue()
+        file_name = slugify(place['result']['name'])
+            
+        # result = df.to_excel(f"{file_name}.xlsx")
+        result = df.to_excel(writer)
+        writer.save()
+        xlsx_data = output.getvalue()
 
 
-    return StreamingResponse(io.BytesIO(xlsx_data), media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', headers={
-            "Content-Disposition": f'attachment; filename="{file_name}.xlsx"'
-        })
+        return StreamingResponse(io.BytesIO(xlsx_data), media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', headers={
+                "Content-Disposition": f'attachment; filename="{file_name}.xlsx"'
+            })
+    else:
+        return None
+    
+    
+   
+    
 
 @app.get('/get_analysis')
 async def analysis_data(place_id: str):
@@ -141,16 +153,21 @@ async def analysis_data(place_id: str):
     place = gmaps.place(place_id=place_id)
 
     reviews = [] #empty list which will hold dictionaries of review
+    if place.get('result', {}).get('reviews')!=None:
+        for i in range(len( place['result']['reviews'])):
+            text = place['result']['reviews'][i]['text']
+            rating = place['result']['reviews'][i]['rating']
+            
+            reviews.append({'rating':rating,
+                        'text':text
+                        }
+                        )
 
-    for i in range(len( place['result']['reviews'])):
-        text = place['result']['reviews'][i]['text']
-        rating = place['result']['reviews'][i]['rating']
-        
-        reviews.append({'rating':rating,
-                    'text':text
-                    }
-                    )
-    df = pd.DataFrame(reviews)
+        df = pd.DataFrame(reviews)
 
-    test = analyze_data(dataframe=df)
-    return test
+        result = analyze_data(dataframe=df)
+        return result
+
+    else:
+        return None
+    
