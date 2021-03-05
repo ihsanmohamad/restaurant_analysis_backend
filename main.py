@@ -35,7 +35,9 @@ def fastApp() -> FastAPI:
 
 app = fastApp()
 
-gmaps = googlemaps.Client(key='AIzaSyAdXQQhUH9oGNoADc_kCx1b1N4RoPuWsPg')
+API_KEY = os.environ['API_KEY']
+
+gmaps = googlemaps.Client(key=API_KEY)
 
 
 @app.get('/search_place')
