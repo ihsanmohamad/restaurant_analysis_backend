@@ -11,6 +11,8 @@ from slugify import slugify
 
 from fastapi.responses import StreamingResponse
 
+import os
+
 import io
 
 def fastApp() -> FastAPI:
