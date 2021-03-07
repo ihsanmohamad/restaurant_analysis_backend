@@ -16,12 +16,12 @@ import os
 import io
 
 def fastApp() -> FastAPI:
-    app = FastAPI(title="Makan Manoi", description="Makan Manoi System")
+    app = FastAPI(title="Cari Makan", description="Cari Makan System")
     
     origins = [
-    "https://makanmanoi.netlify.app/",
-    "https://makanmanoi.netlify.app",
-    "http://makanmanoi.netlify.app",
+    "https://carimakan.netlify.app/",
+    "https://carimakan.netlify.app",
+    "http://carimakan.netlify.app",
     "http://192.168.1.9:3000"
 ]
 
